@@ -67,20 +67,20 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 30,
+                    height: 50,
                   ),
-                  AppButton(
-                    onTap: () {
-                      //  _signUpUser(context);
-                      //   Get.to(const Bottomnavigation());
-                    },
-                    text: "Continue as a Guest",
-                    backgroundColor: MyAppColors.Lightgrey,
-                    containerheight: 55,
-                  ),
-                  SizedBox(
-                    height: 18,
-                  ),
+                  // AppButton(
+                  //   onTap: () {
+                  //     //  _signUpUser(context);
+                  //     //   Get.to(const Bottomnavigation());
+                  //   },
+                  //   text: "Continue as a Guest",
+                  //   backgroundColor: MyAppColors.Lightgrey,
+                  //   containerheight: 55,
+                  // ),
+                  // SizedBox(
+                  //   height: 18,
+                  // ),
                   AppButton(
                     onTap: () {
                       //  _signUpUser(context);
@@ -93,7 +93,7 @@ class WelcomeScreen extends StatelessWidget {
                     containerheight: 55,
                   ),
                   SizedBox(
-                    height: 18,
+                    height: 40,
                   ),
                   AppButton(
                     onTap: () {

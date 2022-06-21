@@ -9,31 +9,35 @@ UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 String userModelToJson(UserModel data) => json.encode(data.docId.toString());
 
 class UserModel {
-  UserModel(
-      {this.userID,
-      this.docId,
-      this.fullName,
-      this.userEmail,
-      this.isapprove,
-      this.userImage,
-      this.password});
+  UserModel({
+    this.userID,
+    this.docId,
+    this.fullName,
+    this.userEmail,
+ //   this.isapprove,
+    this.userImage,
+ //   this.password,
+    this.PhoneNumber,
+  });
 
   String? userID;
   String? docId;
   String? fullName;
   String? userEmail;
-  bool? isapprove;
+ // bool? isapprove;
   String? userImage;
-  String? password;
+ // String? password;
+  String? PhoneNumber;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         userID: json["userID"],
         docId: json["docID"],
         fullName: json["fullName"],
         userEmail: json["userEmail"],
-        isapprove: json["isapprove"],
+    //    isapprove: json["isapprove"],
         userImage: json["userImage"],
-        password: json["password"],
+    //    password: json["password"],
+        PhoneNumber: json["PhoneNumber"],
       );
 
   Map<String, dynamic> toJson(String docID) => {
@@ -41,8 +45,9 @@ class UserModel {
         "docID": docID,
         "fullName": fullName,
         "userEmail": userEmail,
-        "isapprove": isapprove,
+    //    "isapprove": isapprove,
         "userImage": userImage,
-        "password": password,
+    //    "password": password,
+        "PhoneNumber": PhoneNumber,
       };
 }

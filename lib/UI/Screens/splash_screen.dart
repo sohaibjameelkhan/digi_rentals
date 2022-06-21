@@ -7,6 +7,7 @@ import 'package:digi_rentals/Utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../Helpers/OnBoarding1.dart';
 import '../../Utils/res.dart';
 import 'AuthSection/CreateAccount.dart';
 
@@ -22,8 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
         Duration(seconds: 3),
-        () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => WelcomeScreen())));
+        () => Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => OnBoardingPage())));
   }
 
   @override

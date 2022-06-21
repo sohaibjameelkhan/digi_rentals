@@ -4,14 +4,17 @@ import 'dart:io';
 
 import 'package:digi_rentals/UI/Screens/AuthSection/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
+import '../../../Helpers/helper.dart';
 import '../../../Models/user_model.dart';
 import '../../../Services/auth_services.dart';
 import '../../../Services/user_services.dart';
@@ -37,6 +40,8 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController _fullNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
   File? _file;
   bool isChecked = false;
 
@@ -60,6 +65,9 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   bool isvisible = false;
+  File? _image;
+
+  //File? _file;
 
   @override
   Widget build(BuildContext context) {
@@ -120,16 +128,14 @@ class _CreateAccountState extends State<CreateAccount> {
                       Container(
                         height: 120,
                         width: 120,
-                        child: Padding(
-                          padding: const EdgeInsets.all(33.0),
-                          child: SvgPicture.asset(
-                            Res.personicon,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
                         decoration: BoxDecoration(
-                          color: MyAppColors.bgtextfieldcolor,
-                          shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(24),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: _image == null
+                                ? AssetImage(Res.addusersmall)
+                                : FileImage(_image!) as ImageProvider,
+                          ),
                         ),
                       ),
                       Positioned.fill(
@@ -141,7 +147,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             width: 40,
                             child: GestureDetector(
                                 onTap: () {
-                                  //  getFile();
+                                  getImage(true);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -160,193 +166,171 @@ class _CreateAccountState extends State<CreateAccount> {
                 const SizedBox(
                   height: 20,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: authtextfieldWidget(
-                      headingtext: "Full Name",
-                      onPwdTap: () {
-                        setState(() {
-                          isvisible = !isvisible;
-                        });
-                      },
-                      visible: isvisible,
-                      isPasswordField: false,
-                      suffixIcon2: Icons.visibility_off,
-                      suffixIcon: Res.personicon,
-                      showpassoricon: false,
-                      maxlength: 20,
-                      keyboardtype: TextInputType.text,
-                      authcontroller: _fullNameController,
-                      showImage: false,
-                      showsuffix: false,
-                      suffixImage: Res.personicon,
-                      text: "John Doe",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Please Enter more than 6 digit password";
-                        } else if (value.length < 6)
-                          return "Please Enter atleast 6 password";
-                        return null;
-                      }),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: authtextfieldWidget(
-                      headingtext: "Phone Number",
-                      onPwdTap: () {
-                        setState(() {
-                          isvisible = !isvisible;
-                        });
-                      },
-                      visible: isvisible,
-                      isPasswordField: false,
-                      suffixIcon2: Icons.visibility_off,
-                      suffixIcon: Res.phonenumbericon,
-                      maxlength: 20,
-                      showpassoricon: false,
-                      keyboardtype: TextInputType.text,
-                      authcontroller: _fullNameController,
-                      showImage: false,
-                      showsuffix: false,
-                      suffixImage: Res.personicon,
-                      text: "JohnDoe@gmail.com",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Please Enter more than 6 digit password";
-                        } else if (value.length < 6)
-                          return "Please Enter atleast 6 password";
-                        return null;
-                      }),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: authtextfieldWidget(
-                      headingtext: "Email",
-                      onPwdTap: () {
-                        setState(() {
-                          isvisible = !isvisible;
-                        });
-                      },
-                      visible: isvisible,
-                      isPasswordField: false,
-                      suffixIcon2: Icons.visibility_off,
-                      suffixIcon: Res.emailicon,
-                      maxlength: 20,
-                      keyboardtype: TextInputType.text,
-                      authcontroller: _emailController,
-                      showImage: false,
-                      showsuffix: false,
-                      suffixImage: Res.personicon,
-                      text: "JohnDoe@gmail.com",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Please Enter more than 6 digit password";
-                        } else if (value.length < 6)
-                          return "Please Enter atleast 6 password";
-                        return null;
-                      }),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: authtextfieldWidget(
-                      headingtext: "Address",
-                      onPwdTap: () {
-                        setState(() {
-                          isvisible = !isvisible;
-                        });
-                      },
-                      visible: isvisible,
-                      isPasswordField: false,
-                      suffixIcon2: Icons.visibility_off,
-                      suffixIcon: Res.locationicon,
-                      maxlength: 20,
-                      showpassoricon: false,
-                      keyboardtype: TextInputType.text,
-                      authcontroller: _fullNameController,
-                      showImage: false,
-                      showsuffix: false,
-                      suffixImage: Res.personicon,
-                      text: "Enter your Address",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Please Enter more than 6 digit password";
-                        } else if (value.length < 6)
-                          return "Please Enter atleast 6 password";
-                        return null;
-                      }),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: authtextfieldWidget(
-                      headingtext: "Password",
-                      onPwdTap: () {
-                        setState(() {
-                          isvisible = !isvisible;
-                        });
-                      },
-                      showpassoricon: true,
-                      visible: isvisible,
-                      isPasswordField: true,
-                      suffixIcon2: Icons.visibility_off,
-                      suffixIcon: Res.passwordicon,
-                      maxlength: 20,
-                      keyboardtype: TextInputType.text,
-                      authcontroller: _passwordController,
-                      showImage: false,
-                      showsuffix: false,
-                      suffixImage: Res.personicon,
-                      text: "John Doe",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Please Enter more than 6 digit password";
-                        } else if (value.length < 6)
-                          return "Please Enter atleast 6 password";
-                        return null;
-                      }),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: authtextfieldWidget(
-                      headingtext: "Confirm Password",
-                      onPwdTap: () {
-                        setState(() {
-                          isvisible = !isvisible;
-                        });
-                      },
-                      showpassoricon: true,
-                      visible: isvisible,
-                      isPasswordField: true,
-                      suffixIcon2: Icons.visibility_off,
-                      suffixIcon: Res.passwordicon,
-                      maxlength: 20,
-                      keyboardtype: TextInputType.text,
-                      authcontroller: _fullNameController,
-                      showImage: false,
-                      showsuffix: false,
-                      suffixImage: Res.personicon,
-                      text: "Enter your password again",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Please Enter more than 6 digit password";
-                        } else if (value.length < 6)
-                          return "Please Enter atleast 6 password";
-                        return null;
-                      }),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: authtextfieldWidget(
+                          headingtext: "Full Name",
+                          onPwdTap: () {
+                            setState(() {
+                              isvisible = !isvisible;
+                            });
+                          },
+                          visible: isvisible,
+                          isPasswordField: false,
+                          suffixIcon2: Icons.visibility_off,
+                          suffixIcon: Res.personicon,
+                          showpassoricon: false,
+                          maxlength: 20,
+                          keyboardtype: TextInputType.text,
+                          authcontroller: _fullNameController,
+                          showImage: false,
+                          showsuffix: false,
+                          suffixImage: Res.personicon,
+                          text: "John Doe",
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "please enter your name ";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: authtextfieldWidget(
+                            headingtext: "Phone Number",
+                            onPwdTap: () {
+                              setState(() {
+                                isvisible = !isvisible;
+                              });
+                            },
+                            visible: isvisible,
+                            isPasswordField: false,
+                            suffixIcon2: Icons.visibility_off,
+                            suffixIcon: Res.phonenumbericon,
+                            maxlength: 20,
+                            showpassoricon: false,
+                            keyboardtype: TextInputType.text,
+                            authcontroller: _phoneNumberController,
+                            showImage: false,
+                            showsuffix: false,
+                            suffixImage: Res.personicon,
+                            text: "03495149387",
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return "Please Enter a valid phone number";
+                              } else if (value.length < 10)
+                                return "Please Enter 11 digit phone number";
+                              return null;
+                            }),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: authtextfieldWidget(
+                          headingtext: "Email",
+                          onPwdTap: () {
+                            setState(() {
+                              isvisible = !isvisible;
+                            });
+                          },
+                          visible: isvisible,
+                          isPasswordField: false,
+                          suffixIcon2: Icons.visibility_off,
+                          suffixIcon: Res.emailicon,
+                          maxlength: 20,
+                          keyboardtype: TextInputType.text,
+                          authcontroller: _emailController,
+                          showImage: false,
+                          showsuffix: false,
+                          suffixImage: Res.personicon,
+                          text: "JohnDoe@gmail.com",
+                          validator: (value) {
+                            if (value.isEmpty ||
+                                !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(value)) {
+                              return "Please Enter Valid Email Address";
+                            } else if (value.length <= 2)
+                              return "Please Enter more than 2 words";
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: authtextfieldWidget(
+                          headingtext: "Address",
+                          onPwdTap: () {
+                            setState(() {
+                              isvisible = !isvisible;
+                            });
+                          },
+                          visible: isvisible,
+                          isPasswordField: false,
+                          suffixIcon2: Icons.visibility_off,
+                          suffixIcon: Res.locationicon,
+                          maxlength: 20,
+                          showpassoricon: false,
+                          keyboardtype: TextInputType.text,
+                          authcontroller: _addressController,
+                          showImage: false,
+                          showsuffix: false,
+                          suffixImage: Res.personicon,
+                          text: "Enter your Address",
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "please enter address";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: authtextfieldWidget(
+                            headingtext: "Password",
+                            onPwdTap: () {
+                              setState(() {
+                                isvisible = !isvisible;
+                              });
+                            },
+                            showpassoricon: true,
+                            visible: isvisible,
+                            isPasswordField: true,
+                            suffixIcon2: Icons.visibility_off,
+                            suffixIcon: Res.passwordicon,
+                            maxlength: 20,
+                            keyboardtype: TextInputType.text,
+                            authcontroller: _passwordController,
+                            showImage: false,
+                            showsuffix: false,
+                            suffixImage: Res.personicon,
+                            text: "John Doe",
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return "Please Enter more than 6 digit password";
+                              } else if (value.length < 6)
+                                return "Please Enter atleast 6 password";
+                              return null;
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
@@ -409,7 +393,10 @@ class _CreateAccountState extends State<CreateAccount> {
                   height: 25,
                 ),
                 AppButton(
-                  onTap: () {
+                  onTap: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
                     _signUpUser(context);
                     //  Get.to(OtpVerfication());
                   },
@@ -460,13 +447,19 @@ class _CreateAccountState extends State<CreateAccount> {
           .registerUser(
               email: _emailController.text, password: _passwordController.text)
           .then((value) {
-        userServices.createUser(UserModel(
-          fullName: _fullNameController.text,
-          userEmail: _emailController.text,
-          //   isapprove: false,
-          //    password: _passwordController.text,
-          //  userID: getUserID()
-        ));
+        getUrl(context, file: _image).then((imgUrl) {
+          userServices.createUser(UserModel(
+              fullName: _fullNameController.text,
+              userEmail: _emailController.text,
+              PhoneNumber: _phoneNumberController.text,
+              userImage: imgUrl,
+              userID: getUserID()
+
+              //   isapprove: false,
+              //    password: _passwordController.text,
+              //  userID: getUserID()
+              ));
+        });
         makeLoadingFalse();
       }).then((value) {
         Navigator.pushReplacement(
@@ -496,6 +489,53 @@ class _CreateAccountState extends State<CreateAccount> {
         },
       );
     }
+  }
+
+  Future<String> getUrl(BuildContext context, {File? file}) async {
+    String postFileUrl = "";
+    try {
+      Reference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('backendClass/${file!.path.split('/').last}');
+      UploadTask uploadTask = storageReference.putFile(file);
+
+      await uploadTask.whenComplete(() async {
+        await storageReference.getDownloadURL().then((fileURL) {
+          print("I am fileUrl $fileURL");
+          postFileUrl = fileURL;
+        });
+      });
+    } catch (e) {
+      rethrow;
+    }
+
+    return postFileUrl.toString();
+  }
+
+  Future getImage(bool gallery) async {
+    ImagePicker picker = ImagePicker();
+
+    PickedFile? pickedFile;
+    // Let user select photo from gallery
+    if (gallery) {
+      pickedFile = await picker.getImage(
+        source: ImageSource.gallery,
+      );
+    }
+    // Otherwise open camera to get new photo
+    else {
+      pickedFile = await picker.getImage(
+        source: ImageSource.camera,
+      );
+    }
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 }
 

@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../Utils/Colors.dart';
 import '../../Utils/res.dart';
+import 'ChatSection/recent_chat_list.dart';
 
 class Messages extends StatelessWidget {
   const Messages(
@@ -32,11 +33,19 @@ class Messages extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 children: [
-                  Text("Messages with Sellers",
-                      style: GoogleFonts.roboto(
-                          // fontFamily: 'Gilroy',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20)),
+                  InkWell(
+
+
+                    child: Text("Messages with Sellers",
+                        style: GoogleFonts.roboto(
+                            // fontFamily: 'Gilroy',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20)),
+                    onTap: (){
+                      Get.to(RecentChatList());
+
+                    },
+                  ),
                 ],
               ),
             ),

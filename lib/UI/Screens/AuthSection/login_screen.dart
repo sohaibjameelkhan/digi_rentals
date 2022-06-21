@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:provider/provider.dart';
 
 import '../../../Models/user_model.dart';
 import '../../../Services/auth_services.dart';
@@ -24,6 +25,7 @@ import '../../../Helpers/BottomNavBar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../Widgets/auth_textfield_widget.dart';
+import '../ChatSection/user_provider.dart';
 import 'fogot_password.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -40,10 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   File? _file;
+  final _formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
   bool isLoading = false;
-  final _formKey = GlobalKey<FormState>();
 
   final spinkit = SpinKitWave(
     color: Colors.white,
@@ -145,66 +147,78 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: authtextfieldWidget(
-                      headingtext: "Email",
-                      onPwdTap: () {
-                        setState(() {
-                          isvisible = !isvisible;
-                        });
-                      },
-                      visible: isvisible,
-                      isPasswordField: true,
-                      suffixIcon2: Icons.visibility_off,
-                      suffixIcon: Res.emailicon,
-                      maxlength: 20,
-                      keyboardtype: TextInputType.text,
-                      authcontroller: _emailController,
-                      showImage: false,
-                      showsuffix: false,
-                      showpassoricon: false,
-                      suffixImage: Res.personicon,
-                      text: "JohnDoe@gmail.com",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Please Enter more than 6 digit password";
-                        } else if (value.length < 6)
-                          return "Please Enter atleast 6 password";
-                        return null;
-                      }),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: authtextfieldWidget(
-                      headingtext: "Password",
-                      onPwdTap: () {
-                        setState(() {
-                          isvisible = !isvisible;
-                        });
-                      },
-                      visible: isvisible,
-                      isPasswordField: true,
-                      suffixIcon2: Icons.visibility_off,
-                      suffixIcon: Res.emailicon,
-                      maxlength: 20,
-                      keyboardtype: TextInputType.text,
-                      authcontroller: _passwordController,
-                      showImage: false,
-                      showsuffix: false,
-                      showpassoricon: true,
-                      suffixImage: Res.personicon,
-                      text: "JohnDoe@gmail.com",
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return "Please Enter more than 6 digit password";
-                        } else if (value.length < 6)
-                          return "Please Enter atleast 6 password";
-                        return null;
-                      }),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: authtextfieldWidget(
+                            headingtext: "Email",
+                            onPwdTap: () {
+                              setState(() {
+                                isvisible = !isvisible;
+                              });
+                            },
+                            visible: isvisible,
+                            isPasswordField: true,
+                            suffixIcon2: Icons.visibility_off,
+                            suffixIcon: Res.emailicon,
+                            maxlength: 20,
+                            keyboardtype: TextInputType.text,
+                            authcontroller: _emailController,
+                            showImage: false,
+                            showsuffix: false,
+                            showpassoricon: false,
+                            suffixImage: Res.personicon,
+                            text: "JohnDoe@gmail.com",
+                          validator: (value) {
+                            if (value.isEmpty ||
+                                !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(value)) {
+                              return "Please Enter Valid Email Address";
+                            } else if (value.length <= 2)
+                              return "Please Enter more than 2 words";
+                            return null;
+                          },
+
+
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: authtextfieldWidget(
+                            headingtext: "Password",
+                            onPwdTap: () {
+                              setState(() {
+                                isvisible = !isvisible;
+                              });
+                            },
+                            visible: isvisible,
+                            isPasswordField: true,
+                            suffixIcon2: Icons.visibility_off,
+                            suffixIcon: Res.emailicon,
+                            maxlength: 20,
+                            keyboardtype: TextInputType.text,
+                            authcontroller: _passwordController,
+                            showImage: false,
+                            showsuffix: false,
+                            showpassoricon: true,
+                            suffixImage: Res.personicon,
+                            text: "JohnDoe@gmail.com",
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return "Please Enter more than 6 digit password";
+                              } else if (value.length < 6)
+                                return "Please Enter atleast 6 password";
+                              return null;
+                            }),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 15,
@@ -244,7 +258,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 25,
                 ),
                 AppButton(
-                  onTap: () {
+                  onTap: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
                     _loginUser(context);
                     //   Get.to(const Bottomnavigation());
                   },
@@ -290,22 +307,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _loginUser(BuildContext context) async {
     makeLoadingTrue();
-
-    try {
+    try{
       ///This will allow user to register in firebase
       return await authServices
           .loginUser(
               email: _emailController.text, password: _passwordController.text)
           .whenComplete(() => makeLoadingFalse())
-          .then((value) async {
+          .then((firebaseUser) async {
+         userServices
+            .fetchUserRecord(firebaseUser.uid.toString())
+            .first
+            .then((userData) async {
+          print(userData.toJson('docID'));
+          Provider.of<UserProvider>(context, listen: false)
+              .saveUserDetails(userData);
         //  await UserLoginStateHandler.saveUserLoggedInSharedPreference(true);
 
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => Bottomnavigation()));
         return Fluttertoast.showToast(msg: "Login Successfully");
       });
-      ;
-    } on FirebaseAuthException catch (e) {
+
+    });} on  FirebaseAuthException catch (e) {
       makeLoadingFalse();
       return showDialog<void>(
         context: context,

@@ -2,12 +2,15 @@
 
 import 'dart:io';
 
+import 'package:digi_rentals/Models/Review_Model.dart';
+import 'package:digi_rentals/Services/review_services.dart';
 import 'package:digi_rentals/UI/Screens/payment_history.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,20 +20,33 @@ import '../Widgets/appbutton.dart';
 import '../Widgets/auth_textfield_widget.dart';
 
 class FeedbackScreen extends StatefulWidget {
-  const FeedbackScreen({Key? key}) : super(key: key);
+  String userId;
+
+  FeedbackScreen({required this.userId});
 
   @override
   State<FeedbackScreen> createState() => _FeedbackScreenState();
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
+  ReviewServices _reviewServices = ReviewServices();
+
   // AuthServices authServices = AuthServices();
   // UserServices userServices = UserServices();
-  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _experienceController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   File? _file;
   bool isChecked = false;
+
+  // late final _ratingController;
+  // late double _rating;
+  //
+  // double _userRating = 3.0;
+  // int _ratingBarMode = 1;
+  num? _ratingValueservice;
+  num? _ratingValuerecommend;
+  double _initialRating = 2.0;
 
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -62,6 +78,25 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           children: [
             AppButton(
               onTap: () {
+                _reviewServices
+                    .createReview(ReviewModel(
+                        userId: widget.userId,
+                        experiencedesc: _experienceController.text,
+                        servicerating:
+                            num.parse(_ratingValueservice.toString()),
+                        recommedrating:
+                            num.parse(_ratingValuerecommend.toString()),
+                        ownerId: "1"
+                        // payementAmount:
+                        //     num.parse(paymentIntentData!['amount'].toString()),
+                        // userId: getUserID(),
+                        //  paymentDate:
+
+                        //  shopID: getUserID()
+                        ))
+                    .then((value) {
+                  Fluttertoast.showToast(msg: "FeedBack Submitted");
+                });
                 //  _signUpUser(context);
                 //   Get.to(const Bottomnavigation());
               },
@@ -122,90 +157,90 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               SizedBox(
                 height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SizedBox(
-                  height: 85,
-                  width: double.infinity,
-                  child: InkWell(
-                    onTap: () {
-                      Get.to(PaymentHistory());
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(13)),
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor:
-                                      MyAppColors.appColor.withOpacity(0.1),
-                                  child: SvgPicture.asset(Res.personicon),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text("Dial Criage (5+ Years)",
-                                            style: GoogleFonts.roboto(
-                                                // fontFamily: 'Gilroy',
-                                                //color: MyAppColors.blue,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16)),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        RatingBar.builder(
-                                          itemSize: 17,
-                                          initialRating: 3,
-                                          minRating: 1,
-                                          direction: Axis.horizontal,
-                                          allowHalfRating: true,
-                                          itemCount: 5,
-                                          itemPadding: EdgeInsets.symmetric(
-                                              horizontal: 0.0),
-                                          itemBuilder: (context, _) => Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                          ),
-                                          onRatingUpdate: (rating) {
-                                            print(rating);
-                                          },
-                                        ),
-                                        Text(" 4.9 (206 Reviews)",
-                                            style: GoogleFonts.roboto(
-                                                // fontFamily: 'Gilroy',
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 13)),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20),
+              //   child: SizedBox(
+              //     height: 85,
+              //     width: double.infinity,
+              //     child: InkWell(
+              //       onTap: () {
+              //         Get.to(PaymentHistory());
+              //       },
+              //       child: Card(
+              //         shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(13)),
+              //         elevation: 4,
+              //         child: Padding(
+              //           padding: const EdgeInsets.symmetric(horizontal: 20),
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Row(
+              //                 children: [
+              //                   CircleAvatar(
+              //                     radius: 25,
+              //                     backgroundColor:
+              //                         MyAppColors.appColor.withOpacity(0.1),
+              //                     child: SvgPicture.asset(Res.personicon),
+              //                   ),
+              //                   const SizedBox(
+              //                     width: 10,
+              //                   ),
+              //                   Column(
+              //                     mainAxisAlignment: MainAxisAlignment.center,
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: [
+              //                       Row(
+              //                         children: [
+              //                           Text("Dial Criage (5+ Years)",
+              //                               style: GoogleFonts.roboto(
+              //                                   // fontFamily: 'Gilroy',
+              //                                   //color: MyAppColors.blue,
+              //                                   fontWeight: FontWeight.w600,
+              //                                   fontSize: 16)),
+              //                         ],
+              //                       ),
+              //                       SizedBox(
+              //                         height: 5,
+              //                       ),
+              //                       Row(
+              //                         children: [
+              //                           RatingBar.builder(
+              //                             itemSize: 17,
+              //                             initialRating: 3,
+              //                             minRating: 1,
+              //                             direction: Axis.horizontal,
+              //                             allowHalfRating: true,
+              //                             itemCount: 5,
+              //                             itemPadding: EdgeInsets.symmetric(
+              //                                 horizontal: 0.0),
+              //                             itemBuilder: (context, _) => Icon(
+              //                               Icons.star,
+              //                               color: Colors.amber,
+              //                             ),
+              //                             onRatingUpdate: (rating) {
+              //                               print(rating);
+              //                             },
+              //                           ),
+              //                           Text(" 4.9 (206 Reviews)",
+              //                               style: GoogleFonts.roboto(
+              //                                   // fontFamily: 'Gilroy',
+              //                                   color: Colors.grey,
+              //                                   fontWeight: FontWeight.w400,
+              //                                   fontSize: 13)),
+              //                         ],
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ],
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              //     ),
               SizedBox(
                 height: 20,
               ),
@@ -229,25 +264,29 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 child: Row(
                   children: [
                     RatingBar.builder(
-                      itemSize: 40,
-                      initialRating: 3,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                      itemBuilder: (context, _) => Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      onRatingUpdate: (rating) {
-                        print(rating);
-                      },
-                    ),
+                        itemSize: 40,
+                        initialRating: 0,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                        itemBuilder: (context, _) => Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                        onRatingUpdate: (value) {
+                          setState(() {
+                            _ratingValueservice = value;
+                          });
+                        }),
                     SizedBox(
                       width: 15,
                     ),
-                    Text("4.0",
+                    Text(
+                        _ratingValueservice == null
+                            ? "0.0"
+                            : _ratingValueservice.toString(),
                         style: GoogleFonts.roboto(
                             // fontFamily: 'Gilroy',
                             color: Colors.amber,
@@ -280,7 +319,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   children: [
                     RatingBar.builder(
                       itemSize: 40,
-                      initialRating: 3,
+                      initialRating: 0,
                       minRating: 1,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
@@ -290,14 +329,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         Icons.star,
                         color: Colors.amber,
                       ),
-                      onRatingUpdate: (rating) {
-                        print(rating);
+                      onRatingUpdate: (value) {
+                        setState(() {
+                          _ratingValuerecommend = value;
+                        });
                       },
                     ),
                     SizedBox(
                       width: 15,
                     ),
-                    Text("4.0",
+                    Text(
+                        _ratingValuerecommend == null
+                            ? "0.0"
+                            : _ratingValuerecommend.toString(),
                         style: GoogleFonts.roboto(
                             // fontFamily: 'Gilroy',
                             color: Colors.amber,
@@ -313,7 +357,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    Text("Job Description",
+                    Text("Write Experience with seller",
                         style: GoogleFonts.roboto(
                             // fontFamily: 'Gilroy',
                             fontWeight: FontWeight.w700,
@@ -333,6 +377,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   height: 130,
                   width: double.infinity,
                   child: TextFormField(
+                    controller: _experienceController,
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(left: 15),
                         hintText: "Type Here...",

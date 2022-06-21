@@ -30,6 +30,7 @@ customAppBar(
           ),
         ),
       if (showAddIcon)
+
         InkWell(
           onTap: () => onAddIconTap!(),
           child: Padding(

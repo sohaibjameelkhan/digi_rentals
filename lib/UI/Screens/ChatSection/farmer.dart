@@ -8,7 +8,7 @@ class FarmerServices {
   ///Get Specific User Details
   Stream<UserModel> getUserDetails(String docID) {
     return FirebaseFirestore.instance
-        .collection('farmersCollection')
+        .collection('userCollection')
         .doc(docID)
         .snapshots()
         .map((event) =>

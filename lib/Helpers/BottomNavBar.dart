@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
-import '../Utils/Colors.dart';
 import '../UI/Screens/Account.dart';
 import '../UI/Screens/Home.dart';
-import '../UI/Screens/Messages.dart';
 import '../UI/Screens/ManageOrders/manage_orders.dart';
+import '../UI/Screens/Messages.dart';
 import '../UI/Screens/Search.dart';
+import '../Utils/Colors.dart';
 import '../Utils/res.dart';
 
 class Bottomnavigation extends StatefulWidget {

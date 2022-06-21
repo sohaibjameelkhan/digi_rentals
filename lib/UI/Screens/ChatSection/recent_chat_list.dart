@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../../Models/user_model.dart';
 import 'app_bar.dart';
 import 'chat.dart';
@@ -47,7 +46,7 @@ class _RecentChatListState extends State<RecentChatList> {
         onPressed: () {
           _chatServices.addNewMessage(
               receiverID: user.getUserDetails()!.docId.toString(),
-              myID: '1',
+              myID: '6pRq2nB7DtQyXSlR6jnRIofq7jn2',
               detailsModel: ChatDetailsModel(
                 recentMessage: 'Hi',
                 date: DateFormat('MM/dd/yyyy').format(Timestamp.now().toDate()),
@@ -83,9 +82,7 @@ class _RecentChatListState extends State<RecentChatList> {
                           width: MediaQuery.of(context).size.width,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                             CircularProgressIndicator()
-                            ],
+                            children: [CircularProgressIndicator()],
                           ),
                         )
                       : chatDetailsList.length != 0
@@ -130,7 +127,8 @@ class _RecentChatListState extends State<RecentChatList> {
                                                         receiverID: _model
                                                             .otherID
                                                             .toString(),
-                                                        name: chatUserModel.fullName
+                                                        name: chatUserModel
+                                                            .fullName
                                                             .toString(),
                                                         myID: user
                                                             .getUserDetails()!

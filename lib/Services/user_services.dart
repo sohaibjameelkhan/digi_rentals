@@ -30,7 +30,7 @@ class UserServices {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set({
       //"firstName": userModel.firstName,
-     // "userNumber": userModel.userNumber,
+      // "userNumber": userModel.userNumber,
       "userImage": userModel.userImage,
     }, SetOptions(merge: true));
   }
@@ -42,9 +42,9 @@ class UserServices {
         .collection("userCollection")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set({
-    //  "firstName": userModel.firstName,
-    //  "userNumber": userModel.userNumber,
-     // "userImage": userModel.userImage,
+      //  "firstName": userModel.firstName,
+      //  "userNumber": userModel.userNumber,
+      // "userImage": userModel.userImage,
     }, SetOptions(merge: true));
   }
 }

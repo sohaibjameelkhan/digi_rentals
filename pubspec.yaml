@@ -40,6 +40,7 @@ dependencies:
   file_picker: ^4.4.0
   get: ^4.6.1
   flutter_svg: ^1.0.3
+  firebase_storage: ^10.2.4
   cloud_firestore: ^3.1.8
   firebase_core: ^1.12.0
   provider: ^6.0.2
@@ -51,6 +52,11 @@ dependencies:
   chat_bubbles: ^1.2.0
   flutter_share: ^2.0.0
   google_maps_flutter: any
+  cached_network_image: ^3.2.0
+  image_picker: ^0.8.3+1
+  introduction_screen: ^3.0.0
+  flutter_stripe: ^2.5.0
+  http: ^0.13.4
   booster:
     git: https://github.com/MuhammadAliKust/Booster/
 
@@ -88,6 +94,7 @@ flutter:
     - assets/Images/Account/postedproducts.svg
     - assets/Images/Account/settings.svg
     - assets/Images/Account/waniningdialog.svg
+    - assets/Images/addusersmall.png
     - assets/Images/AuthScreensImages/addusericon.svg
     - assets/Images/AuthScreensImages/cameraicon.svg
     - assets/Images/AuthScreensImages/emailicon.svg
@@ -103,16 +110,20 @@ flutter:
     - assets/Images/ChatImages/sendicon.svg
     - assets/Images/ChatImages/videocallingicon.svg
     - assets/Images/HomeScreenImages/bannerhomepage.png
+    - assets/Images/HomeScreenImages/camera.svg
+    - assets/Images/HomeScreenImages/easypaisapayemnt.svg
     - assets/Images/HomeScreenImages/filter.svg
     - assets/Images/HomeScreenImages/home.svg
     - assets/Images/HomeScreenImages/john.svg
     - assets/Images/HomeScreenImages/messageicon.svg
+    - assets/Images/HomeScreenImages/mobileapplication.svg
     - assets/Images/HomeScreenImages/noteicon.svg
     - assets/Images/HomeScreenImages/ourmotto.svg
     - assets/Images/HomeScreenImages/ourmottobac.svg
     - assets/Images/HomeScreenImages/personicon.svg
     - assets/Images/HomeScreenImages/search.svg
     - assets/Images/HomeScreenImages/searchicon.svg
+    - assets/Images/HomeScreenImages/shopping.svg
     - assets/Images/HomeScreenImages/sucessimage.svg
     - assets/Images/HomeScreenImages/tickmark.svg
     - assets/Images/InviteFriends/arrowbackgreen.svg

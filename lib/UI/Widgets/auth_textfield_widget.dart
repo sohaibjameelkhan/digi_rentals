@@ -92,7 +92,7 @@ class _authtextfieldWidgetState extends State<authtextfieldWidget> {
               border: InputBorder.none,
               // suffix: Icon(Icons.remove_red_eye_sharp),
               errorStyle: TextStyle(
-                height: 5,
+                height: 6,
                 color: Colors.red,
                 fontSize: 10,
               ),

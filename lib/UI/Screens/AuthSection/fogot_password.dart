@@ -177,7 +177,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   height: 25,
                 ),
                 AppButton(
-                  onTap: () {
+                  onTap: () async {
+                    authServices
+                        .resetPassword(email: _emailController.text)
+                        .whenComplete(() => Fluttertoast.showToast(
+                            msg: "Email Send SuccessFully"));
+                    _emailController.clear();
                     //   Get.to(const Bottomnavigation());
                   },
                   containerheight: 55,
